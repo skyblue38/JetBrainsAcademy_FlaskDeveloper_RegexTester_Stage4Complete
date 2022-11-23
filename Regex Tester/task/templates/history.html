@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8">
+    <title>Regex Test History</title>
+    <meta content="Chris Freeman" name="author">
+    <meta content="Wed Nov 23 15:30:27 AEDT 2022" name="updated">
+</head>
+<body>
+<h2>RegEx History</h2>
+<div>
+    <ul style="list-style-type:circle">List with the newest tests first
+    {% if rlist is defined %}
+        {% for row in rlist %}
+        <li><a href="/result/{{ row[0] }}/">{{ row[1] }}</a></li>
+        {% endfor %}
+    {% endif %}
+    </ul>
+</div>
+<!-- <p><a href="/">...BACK...</a></p> -->
+<div>
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+    <div>
+        {{message[0]}}
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+</body>
+</html>

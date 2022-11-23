@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8">
+    <title>Regex Testing Tool</title>
+    <meta content="Chris Freeman" name="author">
+</head>
+<body>
+<h2>Welcome to regex testing tool!</h2>
+<div>
+<form method="POST" action="/">
+  <input type="text" placeholder="Enter regex" name="regex">
+  <input type="text" placeholder="Enter text" name="text">
+  <button type="submit">Submit</button>
+</form>
+</div>
+<p><a href="/history/">History</a></p>
+<div>
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+    <div>
+        {{message[0]}}
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+</body>
+</html>

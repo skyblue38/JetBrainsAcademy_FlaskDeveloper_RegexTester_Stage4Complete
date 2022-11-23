@@ -1,0 +1,250 @@
+hyperskill_project:
+  id: 247
+  ide_files: https://stepik.org/media/attachments/lesson/694407/additional_files.json
+  is_template_based: false
+  use_ide: true
+update_date: "Wed, 23 Nov 2022 22:18:40 UTC"
+stages:
+- id: 1240
+  step: 19091
+  is_completed: true
+- id: 1241
+  step: 19092
+  is_completed: true
+- id: 1242
+  step: 19093
+  is_completed: true
+- id: 1243
+  step: 19094
+  is_completed: true
+topics:
+  0:
+  - title: Introduction to Operating systems
+    theory_id: 9704
+  - title: Database handling
+    theory_id: 18184
+  - title: Computer programming
+    theory_id: 8739
+  - title: Introduction to OOP
+    theory_id: 3614
+  - title: Introduction to Python
+    theory_id: 5204
+  - title: Overview of the basic program
+    theory_id: 5208
+  - title: Multi-line programs
+    theory_id: 5233
+  - title: PEP 8
+    theory_id: 5879
+  - title: Comments
+    theory_id: 6081
+  - title: Taking input
+    theory_id: 5913
+  - title: Naming variables
+    theory_id: 5885
+  - title: Program with numbers
+    theory_id: 5872
+  - title: If statement
+    theory_id: 5953
+  - title: Else statement
+    theory_id: 5932
+  - title: Load module
+    theory_id: 6019
+  - title: Create module
+    theory_id: 6057
+  - title: Packages
+    theory_id: 6384
+  - title: Class
+    theory_id: 6661
+  - title: Class instances
+    theory_id: 6669
+  - title: Command line overview
+    theory_id: 8977
+  - title: Parameters and Options
+    theory_id: 9746
+  - title: Pip
+    theory_id: 6230
+  - title: Methods
+    theory_id: 6931
+  - title: Methods and attributes
+    theory_id: 6981
+  - title: Magic methods
+    theory_id: 7139
+  - title: Introduction to databases
+    theory_id: 8497
+  - title: What is SQL
+    theory_id: 7054
+  - title: Relational Data Model
+    theory_id: 13785
+  - title: Basic data types
+    theory_id: 7123
+  - title: Basic CREATE statement
+    theory_id: 9084
+  - title: Inheritance
+    theory_id: 9844
+  - title: Inheritance in Python
+    theory_id: 7235
+  - title: XML
+    theory_id: 6901
+  - title: Basic INSERT statement
+    theory_id: 9059
+  - title: Introduction to SQLite
+    theory_id: 12165
+  - title: JSON
+    theory_id: 6854
+  - title: Data and object mapping
+    theory_id: 8262
+  - title: Object-Relational Mapping (ORM)
+    theory_id: 8312
+  - title: Introduction to logging
+    theory_id: 5538
+  - title: Intro to SQL Alchemy
+    theory_id: 12935
+  - title: Introduction to API
+    theory_id: 17007
+  - title: Basic data types
+    theory_id: 5852
+  - title: Variables
+    theory_id: 5859
+  - title: Invoking a function
+    theory_id: 5891
+  - title: Integer arithmetic
+    theory_id: 5865
+  - title: Declaring a function
+    theory_id: 5900
+  - title: Scopes
+    theory_id: 6322
+  - title: List
+    theory_id: 5979
+  - title: Boolean logic
+    theory_id: 6025
+  - title: Comparisons
+    theory_id: 5920
+  - title: Quotes and multi-line strings
+    theory_id: 5814
+  - title: String formatting
+    theory_id: 6037
+  1:
+  - title: World Wide Web
+    theory_id: 6633
+  - title: HyperText Transfer Protocol
+    theory_id: 6569
+  - title: HTTP URL
+    theory_id: 6740
+  - title: Block-level elements
+    theory_id: 7271
+  - title: Inline elements
+    theory_id: 7518
+  - title: What is CSS
+    theory_id: 7678
+  - title: HTML attributes id and class
+    theory_id: 7527
+  - title: Intro to HTML forms
+    theory_id: 6560
+  - title: HTTP messages
+    theory_id: 6752
+  - title: Introduction to Flask
+    theory_id: 17324
+  - title: Routes
+    theory_id: 17350
+  - title: Requests
+    theory_id: 17333
+  - title: Responses
+    theory_id: 17392
+  - title: Access from browser
+    theory_id: 17374
+  - title: Intro to templates and rendering
+    theory_id: 17702
+  - title: Jinja conditions
+    theory_id: 18156
+  - title: Virtual Environment
+    theory_id: 13923
+  - title: Elif statement
+    theory_id: 5926
+  - title: Web development
+    theory_id: 13931
+  - title: HTML basics
+    theory_id: 6434
+  - title: Libraries
+    theory_id: 8504
+  - title: Frameworks
+    theory_id: 6701
+  - title: Tags and Attributes
+    theory_id: 7536
+  - title: HTML page structure
+    theory_id: 6491
+  - title: Program execution
+    theory_id: 6047
+  - title: Errors
+    theory_id: 6052
+  - title: Exceptions
+    theory_id: 6042
+  - title: Built-in exceptions
+    theory_id: 11680
+  - title: Exception handling
+    theory_id: 6270
+  - title: Polymorphism
+    theory_id: 10027
+  - title: Method overriding
+    theory_id: 7629
+  - title: User-defined exceptions
+    theory_id: 10217
+  - title: Introduction to software architecture
+    theory_id: 15368
+  - title: Function decorators
+    theory_id: 10103
+  - title: MVC
+    theory_id: 17197
+  2:
+  - title: Literals
+    theory_id: 7400
+  - title: Arithmetic expressions
+    theory_id: 7409
+  - title: Basic SELECT statement
+    theory_id: 7392
+  - title: SELECT FROM statement
+    theory_id: 8611
+  - title: Logic and comparison expressions
+    theory_id: 8619
+  - title: Basic DELETE statement
+    theory_id: 9075
+  - title: Intro to MySQL
+    theory_id: 16662
+  - title: Basic UPDATE statement
+    theory_id: 9067
+  - title: Updating selected rows
+    theory_id: 9603
+  - title: Regexps basics
+    theory_id: 7580
+  - title: Regexps in Python
+    theory_id: 9468
+  - title: SQL Alchemy mappings
+    theory_id: 13033
+  - title: SQL Alchemy updating and deleting data
+    theory_id: 15776
+  - title: Indexes
+    theory_id: 6189
+  - title: Identity testing
+    theory_id: 8077
+  - title: Alter table
+    theory_id: 9579
+  - title: PRIMARY KEY constraint
+    theory_id: 9781
+  3:
+  - title: Files
+    theory_id: 13025
+  - title: App configuration
+    theory_id: 17357
+  - title: Advanced responses
+    theory_id: 17341
+  - title: "Synchronous, asynchronous, parallel"
+    theory_id: 9332
+  - title: Processes and threads
+    theory_id: 9420
+  - title: os module
+    theory_id: 11119
+  - title: Introduction to Linux
+    theory_id: 9526
+  - title: Environment variables
+    theory_id: 21817
+  - title: Dictionary
+    theory_id: 6481

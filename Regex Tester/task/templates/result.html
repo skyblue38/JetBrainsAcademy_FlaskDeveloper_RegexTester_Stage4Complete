@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8">
+    <title>Regex Test Result</title>
+    <meta content="Chris Freeman" name="author">
+    <meta content="Wed Nov 23 15:30:27 AEDT 2022" name="updated">
+</head>
+<body>
+<h2>RegEx Result</h2>
+<div>
+    {% if rdict is defined %}
+    <p>Regex: {{ rdict['regex'] }}</p>
+    <p>Text: {{ rdict['text'] }}</p>
+    <p>{{ rdict['result'] }}</p>
+    {% endif %}
+</div>
+<!-- <p><a href="/">...BACK...</a></p> -->
+<div>
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+    <div>
+        {{message[0]}}
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+
+</body>
+</html>

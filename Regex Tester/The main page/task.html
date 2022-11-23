@@ -1,0 +1,15 @@
+<h5 id="description">Description</h5>
+<p>Wonderful! We have a database to store the tests, now, how can we improve the program? Let's add a page with a form to get input from users. With that simple solution, anyone will be able to try out their knowledge.</p>
+<h5 id="objectives">Objectives</h5>
+<p>You can always build a simple web page with HTML/CSS/JS. Pages that do not change information on them are called <strong>static</strong>. For example, if you need to create a simple one-page portfolio to store something about yourself, you can create an HTML document, and voila! It will be displayed in a browser. But this solution isn't perfect for blogs because it will be awkward to create a page for each post. However, you can create <strong>dynamic</strong> pages with templates. In our application, we will have a couple of pages that don't change their layout, but the content there changes constantly. You don't want to write every page yourself — that's where templates become handy.</p>
+<p>This time, the task is to create a home page as an HTML template and connect a Flask View to it. The template should be of a simple layout:</p>
+<ul>
+<li>At the top of the page, place a greeting message: <code class="java">&lt;h2&gt; Welcome to regex testing tool! &lt;/h2&gt;</code>;</li>
+<li>Next, create the main form with two text fields and a submit button. For your input tag, use the <code class="java">name=...</code> attribute; you will access the form data using these names. Please, use <code class="java">regex</code> and <code class="java">text</code> for the name attributes;</li>
+<li>At the bottom, add the link to the history page: <code class="java">&lt;a href="/history/"&gt; History &lt;/a&gt;</code>.</li>
+</ul>
+<p>The main page needs to be available under a <code class="java">GET</code> request to <code class="java">localhost:5000</code><em>.</em> Create a view that renders a template for it. To complete that, use a <code class="java">Flask</code> function: <code class="java">render_template(template_name)</code>.</p>
+<p>Don't forget that templates must be stored in the <code class="java">templates/</code> folder.</p>
+<h5 id="example">Example</h5>
+<p><strong>Example 1:</strong> <em>an example of your page</em></p>
+<p><img alt="" height="115" name="Screenshot 2021-10-12 at 18-45-55 some title.png" src="https://ucarecdn.com/dc1c77ec-0954-41a9-83cb-a2243e5dc881/-/crop/968x115/0,0/-/preview/" width="968"/></p>

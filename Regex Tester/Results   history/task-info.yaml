@@ -1,0 +1,312 @@
+type: edu
+custom_name: Results & history
+files:
+- name: test/__init__.py
+  visible: false
+  learner_created: false
+- name: test/base.py
+  visible: false
+  text: "import http.cookiejar\nimport re\nimport sqlite3\nimport urllib\nimport urllib.error\n\
+    import urllib.parse\nimport urllib.request\n\nfrom bs4 import BeautifulSoup\n\
+    import requests\n\nfrom hstest import CheckResult, FlaskTest\n\nINITIAL_RECORDS\
+    \ = [\n    ('[a-zA-Z]+_66!', 'Thrawn_66!', True),\n    ('^.*$', '34534o', False),\n\
+    \    ('HELLO WORLD', 'HELLO WORLD', True),\n    ('(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\\
+    .[a-zA-Z0-9-.]+$)', 'some text', False),\n    ('(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\\
+    .[a-zA-Z0-9-.]+$)', 'example@gmail.com', True),\n]\n\n\nclass RegexToolTest(FlaskTest):\n\
+    \    source = 'app'\n    use_database = True\n    cookie_jar = http.cookiejar.CookieJar()\n\
+    \    CSRF_PATTERN = r'<input[^>]+name=\"csrfmiddlewaretoken\" ' \\\n         \
+    \          r'value=\"(?P<csrf>\\w+)\"[^>]*>'\n    input_pattern = '''<input[^>]+name=['\"\
+    ][a-zA-Z\\d/_]+['\"][^>]*>'''\n    link_pattern = '''<a[^>]+href=['\"][a-zA-Z\\\
+    d/_]+['\"][^>]*>(.+?)</a>'''\n\n    testing_regex = [('[0-9]?[0-9]:[0-9][0-9]',\
+    \ '17:50', True),\n                     ('\\d{5}-\\d{4}|\\d{5}', 'zipcode', False)]\n\
+    \n\n    def check_create_record(self) -> CheckResult:\n\n        connection =\
+    \ sqlite3.connect(\"db.sqlite3\")\n        cursor = connection.cursor()\n    \
+    \    try:\n            cursor.executemany(\n                \"INSERT INTO record\
+    \ \"\n                \" ('regex', 'text', 'result')\"\n                \" VALUES\
+    \ (?, ?, ?)\",\n                INITIAL_RECORDS\n            )\n            connection.commit()\n\
+    \            cursor.execute(\"SELECT regex, text, result FROM record\")\n    \
+    \        result = cursor.fetchall()\n            for item in INITIAL_RECORDS:\n\
+    \                if item not in result:\n                    return CheckResult.wrong(('Check\
+    \ your Record model: '\n                                              '\"regex\"\
+    \ and \"text\" should be of the string type, '\n                             \
+    \                 '\"result\" should be of the \"bool\" type'))\n            return\
+    \ CheckResult.correct()\n        except sqlite3.DatabaseError as error:\n    \
+    \        return CheckResult.wrong(str(error))\n\n    def check_data_types(self)\
+    \ -> CheckResult:\n        connection = sqlite3.connect(\"db.sqlite3\")\n    \
+    \    cursor = connection.cursor()\n        table_columns = [{\"name\": \"regex\"\
+    , \"count\": 50}, {\"name\": \"text\", \"count\": 1024}]\n        for column in\
+    \ table_columns:\n            cursor.execute(\"SELECT type FROM pragma_table_info('record')\
+    \ where name='{}'\".format(column[\"name\"]))\n            result = cursor.fetchone()\n\
+    \            if result is None or len(result)==0:\n                return CheckResult.wrong('Table\
+    \ \"record\" has no column named \"{}\", '\n                                 \
+    \        'if you want to change model in existing database, remember to use migrate,\
+    \ ALTER TABLE, or delete database file.'.format(column[\"name\"]))\n         \
+    \   if str(column[\"count\"]) not in result[0]:\n                return CheckResult.wrong(\n\
+    \                    'Check your Record model : ' \n                    'column\
+    \ \"{}\" must be a string type with {} symbols, now: {}, '\n                 \
+    \   'if you want to change model in existing database, remember to use migrate,\
+    \ ALTER TABLE, or delete database file.'.format(column[\"name\"], column[\"count\"\
+    ], result[0]))\n        return CheckResult.correct()\n\n    def check_home_page_greeting(self)\
+    \ -> CheckResult:\n        try:\n            main_page = self.get(self.get_url())\n\
+    \            soup = BeautifulSoup(main_page, 'html.parser')\n            try:\n\
+    \                h2_content = soup.find('h2').text.lower()\n            except\
+    \ AttributeError:\n                return CheckResult.wrong('Tag h2 is to be used')\n\
+    \            if 'welcome to regex testing tool' not in h2_content:\n         \
+    \       return CheckResult.wrong(\n                    'Main page should contain\
+    \ \"Welcome to regex testing tool!\" line'\n                )\n            try:\n\
+    \                inputs = soup.find_all('input')\n                if len(inputs)\
+    \ != 4:\n                    button = soup.find('button')\n                  \
+    \  if button is not None:\n                        inputs.append(button)\n   \
+    \             if 'name' not in inputs[0].attrs:\n                    return CheckResult.wrong('The\
+    \ first field should have name attribute')\n                if inputs[0].attrs['name']\
+    \ != 'regex':\n                    return CheckResult.wrong('The first field should\
+    \ have name \"regex\"')\n                if 'type' in inputs[0].attrs:\n     \
+    \               if inputs[0].attrs['type'] != 'text':\n                      \
+    \  return CheckResult.wrong('The first field should have type \"text\"')\n   \
+    \             if 'name' not in inputs[1].attrs:\n                    return CheckResult.wrong('The\
+    \ second field should have name attribute')\n                if inputs[1].attrs['name']\
+    \ != 'text':\n                    return CheckResult.wrong('The second field should\
+    \ have name \"text\"')\n                if 'type' in inputs[1].attrs:\n      \
+    \              if inputs[1].attrs['type'] != 'text':\n                       \
+    \ return CheckResult.wrong('The second field should have type \"text\"')\n   \
+    \             buttons = soup.find_all('button')\n                if 'type' not\
+    \ in buttons[0].attrs:\n                    return CheckResult.wrong('The button\
+    \ should have type attribute')\n                if buttons[0].attrs['type'] !=\
+    \ 'submit':\n                    return CheckResult.wrong(('Make sure there is\
+    \ a button wih the type '\n                                              '\"submit\"\
+    \ on your page'))\n            except IndexError:\n                return CheckResult.wrong('The\
+    \ form lacks some of the fields')\n            try:\n                a_href =\
+    \ soup.find('a').attrs['href']\n            except AttributeError:\n         \
+    \       return CheckResult.wrong('The link to the history page is missing')\n\
+    \            href = '/history/'\n            if a_href != href:\n            \
+    \    return CheckResult.wrong(f'The \"href\" attribute is to be equal to {href}')\n\
+    \            return CheckResult.correct()\n        except urllib.error.URLError:\n\
+    \            return CheckResult.wrong(\n                'Cannot connect to the\
+    \ menu page.'\n            )\n\n\n\n    def check_home_page_layout(self) -> CheckResult:\n\
+    \        number_of_input_tags = 2\n        main_page = self.get(self.get_url())\n\
+    \n        input_tags = re.findall(self.input_pattern, main_page)\n\n        if\
+    \ len(input_tags) < number_of_input_tags:\n            return CheckResult.wrong(\"\
+    Missing input tags or name attribute\")\n\n        link_tag = re.findall(self.link_pattern,\
+    \ main_page)\n        if not link_tag:\n            return CheckResult.wrong(\"\
+    Main page should contain link to history page\")\n\n        return CheckResult.correct()\n\
+    \n    def check_create_regex_test(self) -> CheckResult:\n\n        URL = self.get_url()\n\
+    \        client = requests.session()\n        client.get(URL)\n        try:\n\
+    \            for regex in self.testing_regex:\n                regex_data = dict(regex=regex[0],\
+    \ text=regex[1])\n                response = client.post(URL, data=regex_data,\
+    \ headers=dict(Referer=URL))\n                if not response.ok:\n          \
+    \          return CheckResult.wrong(\"Bad response.\")\n                if str(regex[2])\
+    \ not in response.text:\n                    return CheckResult.wrong((f\"Match\
+    \ result is wrong. \"\n                                              f\"For regex\
+    \ {regex[0]} and text {regex[1]} \"\n                                        \
+    \      f\"should be {regex[2]}\"))\n        except urllib.error.URLError as err:\n\
+    \            return CheckResult.wrong(f'Cannot create test: {err.reason}. Check\
+    \ the form method.')\n        return CheckResult.correct()\n\n    def check_write_to_database(self)\
+    \ -> CheckResult:\n        connection = sqlite3.connect(\"db.sqlite3\")\n    \
+    \    cursor = connection.cursor()\n        try:\n            cursor.execute(\"\
+    SELECT regex, text, result FROM record\")\n            result = cursor.fetchall()\n\
+    \n            for item in self.testing_regex:\n                if item not in\
+    \ result:\n                    return CheckResult.wrong('New tests are not in\
+    \ database')\n            return CheckResult.correct()\n        except sqlite3.DatabaseError\
+    \ as error:\n            return CheckResult.wrong(str(error))\n\n    def check_redirect_result_page(self)\
+    \ -> CheckResult:\n        connection = sqlite3.connect(\"db.sqlite3\")\n    \
+    \    cursor = connection.cursor()\n        cursor.execute(\"DELETE FROM record\"\
+    )\n        connection.commit()\n        URL = self.get_url()\n        client =\
+    \ requests.session()\n        client.get(URL)\n        regex_data = dict(regex='\\\
+    d?\\d/\\d?\\d/\\d\\d\\d\\d', text='12/25/2009')\n        response = client.post(URL,\
+    \ data=regex_data, headers=dict(Referer=URL))\n        if response.status_code!=200:\n\
+    \            return CheckResult.wrong(\"\"\"The attempt to add data was unsuccessful,\
+    \ regex: \\\"{}\\\", text: \\\"{}\\\"\"\"\".format(regex_data['regex'], regex_data['text']))\n\
+    \n        cursor.execute(\"PRAGMA table_info('record')\")\n        result = cursor.fetchone()\n\
+    \        id_name = result[1]\n        result = cursor.execute(\"SELECT \"+id_name+\" FROM\
+    \ record ORDER BY \"+id_name+\" DESC\").fetchone()\n\n        if len(result)==0:\n\
+    \            return CheckResult.wrong(\"\"\"Data not added to the database, regex:\
+    \ \\\"{}\\\", text: \\\"{}\\\"\"\"\".format(regex_data['regex'], regex_data['text']))\n\
+    \        result = result[0]\n        expected_url = self.get_url(f\"result/{result}/\"\
+    )\n        if expected_url != response.url:\n            return CheckResult.wrong((\"\
+    \"\"Request was not redirected correctly, \n                                 \
+    \     it should have been redirected to the result page\"\"\"))\n        return\
+    \ CheckResult.correct()\n\n    def check_result_page(self) -> CheckResult:\n \
+    \       connection = sqlite3.connect(\"db.sqlite3\")\n        cursor = connection.cursor()\n\
+    \        cursor.execute(\"SELECT * FROM record\")\n        records = cursor.fetchall()\n\
+    \        index = 0\n        for record in records:\n            if index >= 5:\n\
+    \                break\n            text = f\"Text: {record[2]}\"\n          \
+    \  regex = f\"Regex: {record[1]}\"\n            result = f\"{bool(record[3])}\"\
+    \n            result_page = self.get(self.get_url(f\"result/{record[0]}/\"))\n\
+    \            if regex not in result_page:\n                return CheckResult.wrong(\"\
+    Regex should be in the page\")\n            if text not in result_page:\n    \
+    \            return CheckResult.wrong(\"Testing string should appear in the page\"\
+    )\n            if result not in result_page:\n                return CheckResult.wrong(\"\
+    Result of testing also must be in the page\")\n            index += 1\n      \
+    \  return CheckResult.correct()\n\n    def check_result_links(self) -> CheckResult:\n\
+    \        history_page_url = self.get_url('history/')\n        history_page = self.get(history_page_url)\n\
+    \        soup = BeautifulSoup(history_page, features=\"html.parser\")\n      \
+    \  names = ['[a-zA-Z]+_66!', '^.*$', 'HELLO WORLD',\n                 '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\\
+    \\.[a-zA-Z0-9-.]+$)',\n                 '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\\\\
+    .[a-zA-Z0-9-.]+$)',\n                 '[0-9]?[0-9]:[0-9][0-9]', '\\\\d{5}-\\\\\
+    d{4}|\\\\d{5}',\n                 '\\\\d?\\\\d/\\\\d?\\\\d/\\\\d\\\\d\\\\d\\\\\
+    d']\n        connection = sqlite3.connect('db.sqlite3')\n        cursor = connection.cursor()\n\
+    \        cursor.execute(\"SELECT id FROM record ORDER BY id DESC \")\n\n     \
+    \   result = cursor.fetchall()\n        all_a = soup.findAll('a')\n        if\
+    \ len(all_a) != len(result):\n            return CheckResult.wrong(\"Wrong number\
+    \ of links on history page\")\n        for link in all_a:\n            try:\n\
+    \                self.get(self.get_url(link.get('href')))\n            except\
+    \ urllib.error.URLError:\n                return CheckResult.wrong(\n        \
+    \            f\"Cannot connect to the {link.get('href')} page.\"\n           \
+    \     )\n            if link.text not in names:\n                return CheckResult.wrong(f'The\
+    \ link {link.attrs[\"href\"]} has a wrong name')\n        return CheckResult.correct()\n"
+  learner_created: false
+- name: tests.py
+  visible: false
+  text: |
+    from hstest import dynamic_test
+    from test.base import RegexToolTest
+
+
+    class RegexToolTestRunner(RegexToolTest):
+        funcs = [
+            # task 1
+            RegexToolTest.check_data_types,
+            RegexToolTest.check_create_record,
+            # task 2
+            RegexToolTest.check_home_page_greeting,
+            RegexToolTest.check_home_page_layout,
+            # task 3
+            RegexToolTest.check_create_regex_test,
+            RegexToolTest.check_write_to_database,
+            # task 4
+            RegexToolTest.check_redirect_result_page,
+            RegexToolTest.check_result_page,
+            RegexToolTest.check_result_links,
+        ]
+
+        @dynamic_test(data=funcs)
+        def test(self, func):
+            return func(self)
+
+
+    if __name__ == '__main__':
+        RegexToolTestRunner().run_tests()
+  learner_created: false
+- name: templates/index.html
+  visible: true
+  text: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta content="text/html; charset=UTF-8">
+        <title>Regex Testing Tool</title>
+        <meta content="Chris Freeman" name="author">
+    </head>
+    <body>
+    <h2>Welcome to regex testing tool!</h2>
+    <div>
+    <form method="POST" action="/">
+      <input type="text" placeholder="Enter regex" name="regex">
+      <input type="text" placeholder="Enter text" name="text">
+      <button type="submit">Submit</button>
+    </form>
+    </div>
+    <p><a href="/history/">History</a></p>
+    <div>
+        {% with message = get_flashed_messages() %}
+        {% if message %}
+        <div>
+            {{message[0]}}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+    </body>
+    </html>
+  learner_created: true
+- name: templates/history.html
+  visible: true
+  learner_created: true
+- name: templates/result.html
+  visible: true
+  learner_created: true
+- name: db.sqlite3
+  visible: true
+  learner_created: true
+- name: app.py
+  visible: true
+  text: |
+    from flask import Flask
+    import sys
+
+    app = Flask(__name__)
+
+    # write your code here
+
+
+    # don't change the following way to run flask:
+    if __name__ == '__main__':
+        if len(sys.argv) > 1:
+            arg_host, arg_port = sys.argv[1].split(':')
+            app.run(host=arg_host, port=arg_port)
+        else:
+            app.run()
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/19094#comment
+status: Failed
+feedback:
+  message: "Wrong answer in test #7\n\nRequest was not redirected correctly, \n  \
+    \                                    it should have been redirected to the result\
+    \ page\n\nPlease find below the output of your program during this failed test.\n\
+    \n---\n\nstdout:\n2022-11-23 19:51:56,627 INFO sqlalchemy.engine.Engine BEGIN\
+    \ (implicit)\n2022-11-23 19:51:56,627 INFO sqlalchemy.engine.Engine PRAGMA main.table_info(\"\
+    record\")\n2022-11-23 19:51:56,627 INFO sqlalchemy.engine.Engine [raw sql] ()\n\
+    2022-11-23 19:51:56,628 INFO sqlalchemy.engine.Engine COMMIT\n * Serving Flask\
+    \ app 'app' (lazy loading)\n * Environment: production\n   WARNING: This is a\
+    \ development server. Do not use it in a production deployment.\n   Use a production\
+    \ WSGI server instead.\n * Debug mode: off\n2022-11-23 19:51:56,753 INFO sqlalchemy.engine.Engine\
+    \ BEGIN (implicit)\n2022-11-23 19:51:56,754 INFO sqlalchemy.engine.Engine INSERT\
+    \ INTO record (regex, text, result) VALUES (?, ?, ?)\n2022-11-23 19:51:56,754\
+    \ INFO sqlalchemy.engine.Engine [generated in 0.00018s] ('[0-9]?[0-9]:[0-9][0-9]',\
+    \ '17:50', 1)\n2022-11-23 19:51:56,755 INFO sqlalchemy.engine.Engine COMMIT\n\
+    2022-11-23 19:51:56,792 INFO sqlalchemy.engine.Engine BEGIN (implicit)\n2022-11-23\
+    \ 19:51:56,795 INFO sqlalchemy.engine.Engine SELECT record.id AS record_id, record.regex\
+    \ AS record_regex, record.text AS record_text, record.result AS record_result\
+    \ \nFROM record \nWHERE record.id = ?\n2022-11-23 19:51:56,795 INFO sqlalchemy.engine.Engine\
+    \ [generated in 0.00024s] (7,)\n2022-11-23 19:51:56,796 INFO sqlalchemy.engine.Engine\
+    \ ROLLBACK\n2022-11-23 19:51:56,804 INFO sqlalchemy.engine.Engine BEGIN (implicit)\n\
+    2022-11-23 19:51:56,805 INFO sqlalchemy.engine.Engine SELECT record.id AS record_id,\
+    \ record.regex AS record_regex, record.text AS record_text, record.result AS record_result\
+    \ \nFROM record \nWHERE record.id = ?\n2022-11-23 19:51:56,805 INFO sqlalchemy.engine.Engine\
+    \ [generated in 0.00013s] (7,)\n2022-11-23 19:51:56,805 INFO sqlalchemy.engine.Engine\
+    \ ROLLBACK\n2022-11-23 19:51:56,815 INFO sqlalchemy.engine.Engine BEGIN (implicit)\n\
+    2022-11-23 19:51:56,816 INFO sqlalchemy.engine.Engine INSERT INTO record (regex,\
+    \ text, result) VALUES (?, ?, ?)\n2022-11-23 19:51:56,816 INFO sqlalchemy.engine.Engine\
+    \ [cached since 0.06208s ago] ('\\\\d{5}-\\\\d{4}|\\\\d{5}', 'zipcode', 0)\n2022-11-23\
+    \ 19:51:56,817 INFO sqlalchemy.engine.Engine COMMIT\n2022-11-23 19:51:56,858 INFO\
+    \ sqlalchemy.engine.Engine BEGIN (implicit)\n2022-11-23 19:51:56,858 INFO sqlalchemy.engine.Engine\
+    \ SELECT record.id AS record_id, record.regex AS record_regex, record.text AS\
+    \ record_text, record.result AS record_result \nFROM record \nWHERE record.id\
+    \ = ?\n2022-11-23 19:51:56,858 INFO sqlalchemy.engine.Engine [cached since 0.06362s\
+    \ ago] (8,)\n2022-11-23 19:51:56,859 INFO sqlalchemy.engine.Engine ROLLBACK\n\
+    2022-11-23 19:51:56,865 INFO sqlalchemy.engine.Engine BEGIN (implicit)\n2022-11-23\
+    \ 19:51:56,866 INFO sqlalchemy.engine.Engine SELECT record.id AS record_id, record.regex\
+    \ AS record_regex, record.text AS record_text, record.result AS record_result\
+    \ \nFROM record \nWHERE record.id = ?\n2022-11-23 19:51:56,866 INFO sqlalchemy.engine.Engine\
+    \ [cached since 0.06128s ago] (8,)\n2022-11-23 19:51:56,866 INFO sqlalchemy.engine.Engine\
+    \ ROLLBACK\n2022-11-23 19:51:56,915 INFO sqlalchemy.engine.Engine BEGIN (implicit)\n\
+    2022-11-23 19:51:56,915 INFO sqlalchemy.engine.Engine INSERT INTO record (regex,\
+    \ text, result) VALUES (?, ?, ?)\n2022-11-23 19:51:56,915 INFO sqlalchemy.engine.Engine\
+    \ [cached since 0.1613s ago] ('\\\\d?\\\\d/\\\\d?\\\\d/\\\\d\\\\d\\\\d\\\\d',\
+    \ '12/25/2009', 1)\n2022-11-23 19:51:56,916 INFO sqlalchemy.engine.Engine COMMIT\n\
+    2022-11-23 19:51:56,957 INFO sqlalchemy.engine.Engine BEGIN (implicit)\n2022-11-23\
+    \ 19:51:56,958 INFO sqlalchemy.engine.Engine SELECT record.id AS record_id, record.regex\
+    \ AS record_regex, record.text AS record_text, record.result AS record_result\
+    \ \nFROM record \nWHERE record.id = ?\n2022-11-23 19:51:56,958 INFO sqlalchemy.engine.Engine\
+    \ [cached since 0.163s ago] (1,)\n2022-11-23 19:51:56,958 INFO sqlalchemy.engine.Engine\
+    \ ROLLBACK\n2022-11-23 19:51:56,965 INFO sqlalchemy.engine.Engine BEGIN (implicit)\n\
+    2022-11-23 19:51:56,965 INFO sqlalchemy.engine.Engine SELECT record.id AS record_id,\
+    \ record.regex AS record_regex, record.text AS record_text, record.result AS record_result\
+    \ \nFROM record \nWHERE record.id = ?\n2022-11-23 19:51:56,965 INFO sqlalchemy.engine.Engine\
+    \ [cached since 0.1605s ago] (1,)\n2022-11-23 19:51:56,965 INFO sqlalchemy.engine.Engine\
+    \ ROLLBACK\n\nstderr:\n* Running on http://localhost:8000/ (Press CTRL+C to quit)\n\
+    127.0.0.1 - - [23/Nov/2022 19:51:56] \"GET / HTTP/1.1\" 200 -\n127.0.0.1 - - [23/Nov/2022\
+    \ 19:51:56] \"GET / HTTP/1.1\" 200 -\n127.0.0.1 - - [23/Nov/2022 19:51:56] \"\
+    GET / HTTP/1.1\" 200 -\n127.0.0.1 - - [23/Nov/2022 19:51:56] \""
+  time: "Wed, 23 Nov 2022 08:51:57 UTC"
+record: -1

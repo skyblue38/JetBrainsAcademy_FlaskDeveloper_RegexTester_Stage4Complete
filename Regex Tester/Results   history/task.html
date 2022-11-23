@@ -1,0 +1,14 @@
+<h5 id="description">Description</h5>
+<p>In the final stage, we will create the history page and a page that shows the actual result of a comparison. From now on, users will be redirected to the specific page with the result instead of <code class="language-html">True</code> or <code class="language-html">False</code>. Users should also be able to check the previous matches and open them again.</p>
+<h5 id="objectives">Objectives</h5>
+<p>The first task is to create views for the history and result pages. The result page should display the regexp, text, and the result fields. The history page is an unordered list of all entries, with newer ones on top. To implement it, reverse every entry of the object list in the database. To access data in the template, use a Jinja Flask template with parameters. The same applies to the history page. Use the <code class="language-html">for</code> tag in your history template to list every entry. </p>
+<p>The second task is to change <code class="language-html">response</code> from the previous stage to another function that will take us to the result page. For this, use a redirect function of Flask.</p>
+<p>Your final task is to add a link to the result page inside every <code class="language-html">&lt;li&gt;&lt;/li&gt;</code> tag pair in the template. Put <code class="language-html">result/id/</code> inside the <code class="language-html">href</code> attribute, where <code class="language-html">id</code> is the ID of the passed variable.</p>
+<h5 id="example">Example</h5>
+<p><strong>Example 1:</strong> the<em> localhost:8000/result/1/</em> page</p>
+<pre><code class="language-html">&lt;p&gt;Regex: ^[a-z0-9_-]{3,16}$&lt;/p&gt;
+&lt;p&gt;Text: thrawn_66&lt;/p&gt;
+&lt;p&gt;True&lt;/p&gt;</code></pre>
+<p>The<em> localhost:8000/history/ </em>page</p>
+<pre><code class="language-html">&lt;li&gt;&lt;a href="/result/2/"&gt;[\d]{1,2}$&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="/result/1/"&gt;^[a-z0-9_-]{3,16}$&lt;/a&gt;&lt;/li&gt;</code></pre>

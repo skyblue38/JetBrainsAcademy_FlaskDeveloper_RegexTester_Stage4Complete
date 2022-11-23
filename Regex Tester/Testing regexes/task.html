@@ -1,0 +1,18 @@
+<h5 id="description">Description</h5>
+<p>Our service receives input, but then nothing happens. Let's change it! This time, users should get a response from the service after filling up and submitting the form.</p>
+<h5 id="objectives">Objectives</h5>
+<p>Our main task is to determine whether the pattern matches a string provided by users. It's considered good practice to automate tedious work to the most possible extent. Besides, why match the pattern manually if we have a module that has been created exclusively for this task?</p>
+<p>Your task is to create a handler for the form using the <code class="java">re</code> module. First, you should import this module to get a regex and a string from a <code class="java">POST</code> request in a view function. Thereafter, the handler tries to match the submitted regex with the string and show the result to users. At this stage, it should return a <code class="java">True</code> or <code class="java">False</code>.</p>
+<p></p><div class="alert alert-primary">Be careful! The matching method does not return a boolean by itself. </div><p></p>
+<p>After testing a pattern, the service must save it to the database. Use the <code class="java">Record</code> model that we have created earlier. Remember, the <code class="java">result</code> field is boolean. The form method must be <code class="java">POST</code>.</p>
+<h5 id="examples">Examples</h5>
+<p><strong>Example 1: </strong><em>checking the username</em></p>
+<p><em>A </em><em>user entered <code class="java">^[a-z0-9_-]{3,16}$</code> to see whether an alphanumeric string matches a username of 3-16 symbols; as a string, they enter <code class="java">thrawn_66</code>:</em></p>
+<p><img alt="" height="158" name="image.png" src="https://ucarecdn.com/9368e25a-444c-49c9-9001-c5abdc021746/" width="539"/></p>
+<p><em>Service output:</em></p>
+<p><img alt="" height="157" name="image.png" src="https://ucarecdn.com/9164a74d-e83e-417b-b603-cef9e40619fe/" width="441"/></p>
+<p><strong>Example 2:</strong> <em>checking the age</em></p>
+<p><em>A user wants to check the age. The first input is <code class="java">[\d]{1,2}$</code>. It matches positive numbers of 1-2 symbols:</em></p>
+<p><img alt="" height="177" name="image.png" src="https://ucarecdn.com/822775f6-4296-4c21-ae41-d98ff72bd15e/" width="566"/></p>
+<p><em>As the second field is of the <code class="java">string</code> type, <code class="java">twenty</code> would produce <code class="java">False</code>:</em></p>
+<p><img alt="" height="164" name="image.png" src="https://ucarecdn.com/245b6557-3c16-49d3-a00d-c94025c3c800/" width="438"/></p>
